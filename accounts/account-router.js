@@ -6,10 +6,12 @@ const db = require('../data/dbConfig.js');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    let { limit = 5, sortby = 'id', sortdir = 'desc' } = req.query;
-
+    let { page = 1, limit = 5, sortby = 'id', sortdir = 'desc' } = req.query;
+    const offset = limit * (page - 1);
     db("accounts")
-    .where(req.query)
+    .orderBy(sortby,sortdir)
+    .limit(limit)
+    .offset(offset)
     .then(accounts => {
         res.status(200).json({data: accounts});
     })
