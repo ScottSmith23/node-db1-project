@@ -6,8 +6,10 @@ const db = require('../data/dbConfig.js');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    db.select("*")
-    .from("accounts")
+    let { limit = 5, sortby = 'id', sortdir = 'desc' } = req.query;
+
+    db("accounts")
+    .where(req.query)
     .then(accounts => {
         res.status(200).json({data: accounts});
     })
